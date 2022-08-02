@@ -13,7 +13,11 @@ class SlackWebhookNotifier(Notifier):
 
     def process(self, findings, detector_name):
         """Send a list of findings via Slack incoming webhook."""
-        requests.post(self._webhook_url, json={"text": "{} found the following:".format(detector_name)})
+        requests.post(
+            self._webhook_url,
+            json={"text": f"{detector_name} found the following:"},
+        )
+
         for finding in findings:
             requests.post(self._webhook_url, json={"text": str(finding)})
 

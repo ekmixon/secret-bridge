@@ -6,11 +6,10 @@ class ConsoleNotifier(Notifier):
 
     def __init__(self, config):
         super()
-        pass
 
     def process(self, findings, detector_name):
         """Print the findings to the console with a heading for the detector name."""
-        print("{} found the following:".format(detector_name))
+        print(f"{detector_name} found the following:")
         for finding in findings:
             print(finding)
 

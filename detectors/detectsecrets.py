@@ -11,10 +11,7 @@ class DetectSecrets(Detector):
         """Initialize the `detect-secrets` wrapper with an optional
         path to the `detect-secrets` binary.
         """
-        if path is not None:
-            self._binary_path = path
-        else:
-            self._binary_path = "detect-secrets"
+        self._binary_path = path if path is not None else "detect-secrets"
         self.logger = logging.getLogger("DetectSecrets")
 
     @property
@@ -36,7 +33,10 @@ class DetectSecrets(Detector):
         if file_obj is None or file_obj.patch is None:
             return []
 
-        self.logger.info("instantiating detect-secrets on patch contents modifying {}".format(file_obj.filename))
+        self.logger.info(
+            f"instantiating detect-secrets on patch contents modifying {file_obj.filename}"
+        )
+
         with tempfile.NamedTemporaryFile() as tmp:
             tmp.write(file_obj.patch.encode())
             tmp.flush()
@@ -52,6 +52,14 @@ class DetectSecrets(Detector):
         results = parsed_output["results"]
         findings = []
         for _, file_results in results.items():
-            for file_result in file_results:
-                findings.append(Finding(filename, file_result["type"], file_result["hashed_secret"], link=commit_link))
+            findings.extend(
+                Finding(
+                    filename,
+                    file_result["type"],
+                    file_result["hashed_secret"],
+                    link=commit_link,
+                )
+                for file_result in file_results
+            )
+
         return findings

@@ -28,34 +28,31 @@ class WatcherConfig:
 
         for detector in self._config['detectors']:
             if detector not in AvailableDetectors:
-                logging.error(
-                    'Unknown detector {} listed in configuration'.format(
-                        detector))
+                logging.error(f'Unknown detector {detector} listed in configuration')
                 continue
-            logging.info('Setting up detector: {}'.format(detector))
+            logging.info(f'Setting up detector: {detector}')
             # TODO: Add support for per-detector configuration
             self.detectors.append(AvailableDetectors[detector]())
 
         for notifier_type, config in self._config['notifiers'].items():
             notifier = Registry.get(notifier_type)
             if not notifier:
-                logging.error(
-                    'Invalid notifier type: {}'.format(notifier_type))
+                logging.error(f'Invalid notifier type: {notifier_type}')
                 continue
-            logging.info('Setting up notifier: {}'.format(notifier_type))
+            logging.info(f'Setting up notifier: {notifier_type}')
             self.notifiers.append(notifier(config))
 
         self.validate()
 
     def create_monitors(self, client):
         for organization in self._config['monitors'].get('organizations', []):
-            logging.info('Monitoring organization: {}'.format(organization))
+            logging.info(f'Monitoring organization: {organization}')
             self.monitors.append(Organization(organization, client))
         for user in self._config['monitors'].get('users', []):
-            logging.info('Monitoring user: {}'.format(user))
+            logging.info(f'Monitoring user: {user}')
             self.monitors.append(User(user, client))
         for repository in self._config['monitors'].get('repos', []):
-            logging.info('Monitoring repository: {}'.format(repository))
+            logging.info(f'Monitoring repository: {repository}')
             self.monitors.append(Repository(repository, client))
 
     def validate(self):

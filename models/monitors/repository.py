@@ -9,8 +9,7 @@ class Repository(MonitorModel):
     def __init__(self, repository_name, client):
         self.name = repository_name
         self.event_offset = 0
-        stored_offset = State.get('repository', self.name)
-        if stored_offset:
+        if stored_offset := State.get('repository', self.name):
             self.event_offset = stored_offset
         self.client = client
         self.repo = client.get_repo(self.name)
@@ -18,8 +17,7 @@ class Repository(MonitorModel):
     def poll(self):
         events = paginate(self.repo.get_events, event_offset=self.event_offset)
         if events:
-            logging.info('Found {} events for repository {}'.format(
-                len(events), self.name))
+            logging.info(f'Found {len(events)} events for repository {self.name}')
             self.event_offset = int(events[0].id)
             State.update('repository', self.name, self.event_offset)
         return events

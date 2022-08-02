@@ -32,12 +32,12 @@ class Finding:
         return hash((self._filename, self._secret_type, self._secret_value))
 
     def __str__(self):
-        s = "Secret type {} found in {}".format(self._secret_type, self._filename)
+        s = f"Secret type {self._secret_type} found in {self._filename}"
         if self._line_number is not None:
-            s = s + ":{}".format(self._line_number)
+            s += f":{self._line_number}"
         if self._link is not None:
-            s = s + " ({})".format(self._link)
+            s += f" ({self._link})"
         return s
 
     def __repr__(self):
-        return "<{}> ({})".format(self._secret_type, self._filename)
+        return f"<{self._secret_type}> ({self._filename})"

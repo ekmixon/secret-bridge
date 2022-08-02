@@ -23,8 +23,9 @@ class EventState:
                     return
                 except Exception as e:
                     logging.info(
-                        'Error loading existing state information from {}. Creating a new state file'
-                        .format(filename))
+                        f'Error loading existing state information from {filename}. Creating a new state file'
+                    )
+
         else:
             logging.info('No state file found, creating a new one')
         self.flush()
@@ -41,7 +42,7 @@ class EventState:
         return self.state['monitors'][type][key]
 
     def flush(self):
-        logging.debug('Flusing state file to {}'.format(self.state_filename))
+        logging.debug(f'Flusing state file to {self.state_filename}')
         with open(self.state_filename, 'w') as state_file:
             state_file.write(json.dumps(self.state))
 

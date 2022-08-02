@@ -17,10 +17,8 @@ class MockMonitor(MonitorModel):
     def __init__(self):
         self.poll_count = 0
         self.pages = {}
-        for i in range(0, 10):
-            self.pages[i] = []
-            for j in range(0, PAGE_SIZE):
-                self.pages[i].append(MockEvent(j))
+        for i in range(10):
+            self.pages[i] = [MockEvent(j) for j in range(PAGE_SIZE)]
     
     def poll(self):
         self.poll_count += 1

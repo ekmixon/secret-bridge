@@ -26,14 +26,13 @@ class Poller:
         while True:
             attempts += 1
             try:
-                results = monitor.poll()
-                return results
+                return monitor.poll()
             except requests.exceptions.ConnectionError as e:
                 if attempts > self.retry_count:
                     raise e
                 logging.warn(
-                    'ConnectionError when requesting events... attempt {}/{}'.
-                    format(attempts, self.retry_count))
+                    f'ConnectionError when requesting events... attempt {attempts}/{self.retry_count}'
+                )
 
     def poll(self):
         events = {}
@@ -43,10 +42,11 @@ class Poller:
             for result in results:
                 if result.type not in self.event_types:
                     logging.debug(
-                        'Found invalid event type: Event ID {} with type {}'.
-                        format(result.id, result.type))
+                        f'Found invalid event type: Event ID {result.id} with type {result.type}'
+                    )
+
                     continue
                 events[result.id] = result
-                logging.debug('Found PushEvent {}'.format(result.id))
+                logging.debug(f'Found PushEvent {result.id}')
         for _, event in events.items():
             Processor.process_event(event)

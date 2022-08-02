@@ -191,6 +191,6 @@ class TestWebhook(unittest.TestCase):
         self.assertEqual(event.repo.name,
                          EXAMPLE_WEBHOOK_EVENT['repo']['name'])
         self.assertEqual(event.type, WEBHOOK_PUSH_EVENT_TYPE)
-        expected_url = 'https://api.github.com/repos/{}'.format(
-            EXAMPLE_WEBHOOK_EVENT['repo']['full_name'])
+        expected_url = f"https://api.github.com/repos/{EXAMPLE_WEBHOOK_EVENT['repo']['full_name']}"
+
         self.assertEqual(event.repo.url, expected_url)

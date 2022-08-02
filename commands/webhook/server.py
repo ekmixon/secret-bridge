@@ -31,7 +31,7 @@ def verify_signature(secret, request):
     # Verify that the X-Hub-Signature header is provided
     signature_header = request.headers.get(GITHUB_SIGNATURE_HEADER)
     if not signature_header:
-        logging.error('No {} header provided'.format(GITHUB_SIGNATURE_HEADER))
+        logging.error(f'No {GITHUB_SIGNATURE_HEADER} header provided')
         return False
 
     signature_parts = signature_header.split('=')
@@ -60,8 +60,10 @@ def generate_event(payload, type=WEBHOOK_PUSH_EVENT_TYPE):
     payload.pop('sender')
 
     payload['type'] = type
-    payload['repo']['url'] = 'https://api.github.com/repos/{}'.format(
-        payload['repo']['full_name'])
+    payload['repo'][
+        'url'
+    ] = f"https://api.github.com/repos/{payload['repo']['full_name']}"
+
 
     for commit in payload['commits']:
         commit['sha'] = commit['id']
@@ -83,7 +85,7 @@ def webhook():
         return
 
     if event_type != WEBHOOK_PUSH_EVENT_TYPE:
-        logging.info('Ignoring event type: {}'.format(event_type))
+        logging.info(f'Ignoring event type: {event_type}')
         return ('', 204)
 
     secret = app.config.get('GITHUB_WEBHOOK_SECRET')

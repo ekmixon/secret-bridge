@@ -11,10 +11,7 @@ class GitSecrets(Detector):
         """Initialize the `git-secrets` wrapper with an optional
         path to the `detect-secrets` binary.
         """
-        if path is not None:
-            self._binary_path = path
-        else:
-            self._binary_path = "git-secrets"
+        self._binary_path = path if path is not None else "git-secrets"
         self.logger = logging.getLogger("GitSecrets")
 
     @property

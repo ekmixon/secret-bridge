@@ -12,9 +12,11 @@ class MockPaginator:
         self.offset = 1
 
     def poll_func(self):
-        events = []
-        for i in reversed(range(self.offset, self.offset + PAGE_SIZE)):
-            events.append(MockEvent(i))
+        events = [
+            MockEvent(i)
+            for i in reversed(range(self.offset, self.offset + PAGE_SIZE))
+        ]
+
         self.offset = events[0].id
         return events
 
@@ -23,10 +25,7 @@ class MockPaginator:
         Pretends nothing has happened, returning the "last" PAGE_SIZE
         events
         """
-        events = []
-        for i in range(self.offset, self.offset - PAGE_SIZE, -1):
-            events.append(MockEvent(i))
-        return events
+        return [MockEvent(i) for i in range(self.offset, self.offset - PAGE_SIZE, -1)]
 
 
 class MockRetryMonitor:

@@ -11,10 +11,7 @@ class TruffleHog(Detector):
         """Initialize the `trufflehog` wrapper with an optional
         path to the `trufflehog` binary
         """
-        if path is not None:
-            self._binary_path = path
-        else:
-            self._binary_path = "trufflehog"
+        self._binary_path = path if path is not None else "trufflehog"
         self.logger = logging.getLogger("TruffleHog")
 
     @property
